@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담 조회</title>
+</head>
+<body>
+<h2>특정 상담 요청 조회</h2>
+<input type="number" id="inquiryId" placeholder="상담 요청 ID">
+<button onclick="getInquiry()">조회</button>
+<p id="inquiryDetails"></p>
+
+<script>
+    function getInquiry() {
+        let inquiryId = document.getElementById("inquiryId").value;
+
+        fetch(`/api/inquiries/${inquiryId}`)
+        .then(response => {
+            if (!response.ok) throw new Error("상담 요청이 존재하지 않습니다.");
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById("inquiryDetails").innerText =
+                `ID: ${data.id}, 설명: ${data.description}, 상태: ${data.status}`;
+        })
+        .catch(error => document.getElementById("inquiryDetails").innerText = error);
+    }
+</script>
+</body>
+</html>

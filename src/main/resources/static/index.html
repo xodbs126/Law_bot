@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>법률 상담 시스템</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            margin: 15px 0;
+        }
+        input, textarea, button {
+            width: 90%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .needed {
+            background-color: #28a745;
+            color: white;
+        }
+        .not-needed {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<h2>법률 상담 시스템</h2>
+
+<div class="container">
+    <h3>📝 사용자 등록</h3>
+    <div class="input-group">
+        <input type="text" id="username" placeholder="사용자 이름">
+        <input type="password" id="password" placeholder="비밀번호">
+        <input type="email" id="email" placeholder="이메일">
+        <select id="role">
+            <option value="USER">일반 사용자</option>
+            <option value="LAWYER">변호사</option>
+        </select>
+        <button onclick="registerUser()">회원가입</button>
+    </div>
+    <p id="registerResult"></p>
+</div>
+
+<div class="container">
+    <h3>⚖️ 법률 상담 요청</h3>
+    <div class="input-group">
+        <input type="number" id="userId" placeholder="사용자 ID 입력">
+        <textarea id="description" placeholder="사건 설명을 입력하세요"></textarea>
+        <button onclick="submitInquiry()">상담 요청</button>
+    </div>
+    <p id="inquiryResult"></p>
+</div>
+
+<div class="container">
+    <h3>📜 상담 요청 목록 조회</h3>
+    <button onclick="fetchInquiries()">모든 상담 요청 보기</button>
+    <div id="inquiriesList"></div>
+</div>
+
+<div class="container">
+    <h3>🔍 상담 상세 조회</h3>
+    <div class="input-group">
+        <input type="number" id="inquiryId" placeholder="상담 ID 입력">
+        <button onclick="fetchInquiryDetails()">상담 상세 확인</button>
+    </div>
+    <div id="inquiryDetails"></div>
+</div>
+
+<script>
+    const API_BASE = "http://localhost:8080/api";
+
+    // 사용자 등록 요청
+    function registerUser() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const email = document.getElementById("email").value;
+        const role = document.getElementById("role").value;
+
+        fetch(`${API_BASE}/users/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password, email, role })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("registerResult").innerText = "✅ 사용자 등록 성공! ID: " + data.id;
+        })
+        .catch(error => {
+            document.getElementById("registerResult").innerText = "❌ 사용자 등록 실패!";
+        });
+    }
+
+    // 상담 요청 제출
+    function submitInquiry() {
+        const userId = document.getElementById("userId").value;
+        const description = document.getElementById("description").value;
+
+        fetch(`${API_BASE}/inquiries/${userId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(description)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("inquiryResult").innerHTML = `✅ 상담 요청 완료! 상담 ID: ${data.id}`;
+        })
+        .catch(error => {
+            document.getElementById("inquiryResult").innerText = "❌ 상담 요청 실패!";
+        });
+    }
+
+    // 모든 상담 요청 조회
+    function fetchInquiries() {
+        fetch(`${API_BASE}/inquiries`)
+        .then(response => response.json())
+        .then(data => {
+            let html = "<ul>";
+            data.forEach(inquiry => {
+                html += `<li>🆔 ${inquiry.id} - ${inquiry.description} (📌 ${inquiry.status})</li>`;
+            });
+            html += "</ul>";
+            document.getElementById("inquiriesList").innerHTML = html;
+        })
+        .catch(error => {
+            document.getElementById("inquiriesList").innerText = "❌ 상담 목록 조회 실패!";
+        });
+    }
+
+    // 특정 상담 요청 상세 조회
+    function fetchInquiryDetails() {
+        const inquiryId = document.getElementById("inquiryId").value;
+
+        fetch(`${API_BASE}/inquiries/${inquiryId}`)
+        .then(response => response.json())
+        .then(data => {
+            let resultClass = data.status === "NEEDED" ? "needed" : "not-needed";
+            document.getElementById("inquiryDetails").innerHTML = `
+                <div class="result ${resultClass}">
+                    🆔 상담 ID: ${data.id}<br>
+                    📜 사건 설명: ${data.description}<br>
+                    📌 상담 필요 여부: <strong>${data.status}</strong>
+                </div>
+            `;
+        })
+        .catch(error => {
+            document.getElementById("inquiryDetails").innerText = "❌ 상담 상세 조회 실패!";
+        });
+    }
+</script>
+
+</body>
+</html>

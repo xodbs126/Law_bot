@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모든 법률 상담 조회</title>
+</head>
+<body>
+<h2>법률 상담 목록</h2>
+<button onclick="getInquiries()">목록 조회</button>
+<ul id="inquiryList"></ul>
+
+<script>
+    function getInquiries() {
+        fetch("/api/inquiries")
+        .then(response => response.json())
+        .then(data => {
+            let list = document.getElementById("inquiryList");
+            list.innerHTML = "";
+            data.forEach(inquiry => {
+                let item = document.createElement("li");
+                item.innerText = `ID: ${inquiry.id}, 설명: ${inquiry.description}, 상태: ${inquiry.status}`;
+                list.appendChild(item);
+            });
+        })
+        .catch(error => console.error(error));
+    }
+</script>
+</body>
+</html>
