@@ -3,183 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>법률 상담 시스템</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            text-align: center;
-        }
-        h2 {
-            color: #333;
-        }
-        .container {
-            width: 50%;
-            margin: auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .input-group {
-            margin: 15px 0;
-        }
-        input, textarea, button {
-            width: 90%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .needed {
-            background-color: #28a745;
-            color: white;
-        }
-        .not-needed {
-            background-color: #dc3545;
-            color: white;
-        }
-    </style>
+    <title>LawBot - 쉽고 빠른 법률 상담</title>
+    <link rel="stylesheet" href="stylee.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- 헤더 -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">Law<span>Bot</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#">법률 상담</a></li>
+                    <li><a href="#">변호사 찾기</a></li>
+                    <li><a href="#">상담 사례</a></li>
+                    <li><a href="#">해결 사례</a></li>
+                    <li><a href="#">고객문의</a></li>
+                    <li><a href="#">안녕하세요</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button class="btn btn-outline">로그인</button>
+                
+            </div>
+        </div>
+    </header>
 
-<h2>법률 상담 시스템</h2>
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <div class="container">
+            <h1>AI로 더 쉽고 빠른 법률 상담</h1>
+            <p>LawBot이 당신의 법률 문제를 해결해 드립니다. 지금 바로 상담하고 전문 변호사의 도움을 받아보세요.</p>
+            <div class="search-box">
+                <input type="text" placeholder="어떤 법률 문제가 있으신가요?">
+                <button>상담 시작하기</button>
+            </div>
+        </div>
+    </section>
 
-<div class="container">
-    <h3>📝 사용자 등록</h3>
-    <div class="input-group">
-        <input type="text" id="username" placeholder="사용자 이름">
-        <input type="password" id="password" placeholder="비밀번호">
-        <input type="email" id="email" placeholder="이메일">
-        <select id="role">
-            <option value="USER">일반 사용자</option>
-            <option value="LAWYER">변호사</option>
-        </select>
-        <button onclick="registerUser()">회원가입</button>
-    </div>
-    <p id="registerResult"></p>
-</div>
-
-<div class="container">
-    <h3>⚖️ 법률 상담 요청</h3>
-    <div class="input-group">
-        <input type="number" id="userId" placeholder="사용자 ID 입력">
-        <textarea id="description" placeholder="사건 설명을 입력하세요"></textarea>
-        <button onclick="submitInquiry()">상담 요청</button>
-    </div>
-    <p id="inquiryResult"></p>
-</div>
-
-<div class="container">
-    <h3>📜 상담 요청 목록 조회</h3>
-    <button onclick="fetchInquiries()">모든 상담 요청 보기</button>
-    <div id="inquiriesList"></div>
-</div>
-
-<div class="container">
-    <h3>🔍 상담 상세 조회</h3>
-    <div class="input-group">
-        <input type="number" id="inquiryId" placeholder="상담 ID 입력">
-        <button onclick="fetchInquiryDetails()">상담 상세 확인</button>
-    </div>
-    <div id="inquiryDetails"></div>
-</div>
-
-<script>
-    const API_BASE = "http://localhost:8080/api";
-
-    // 사용자 등록 요청
-    function registerUser() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        const email = document.getElementById("email").value;
-        const role = document.getElementById("role").value;
-
-        fetch(`${API_BASE}/users/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password, email, role })
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("registerResult").innerText = "✅ 사용자 등록 성공! ID: " + data.id;
-        })
-        .catch(error => {
-            document.getElementById("registerResult").innerText = "❌ 사용자 등록 실패!";
-        });
-    }
-
-    // 상담 요청 제출
-    function submitInquiry() {
-        const userId = document.getElementById("userId").value;
-        const description = document.getElementById("description").value;
-
-        fetch(`${API_BASE}/inquiries/${userId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(description)
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("inquiryResult").innerHTML = `✅ 상담 요청 완료! 상담 ID: ${data.id}`;
-        })
-        .catch(error => {
-            document.getElementById("inquiryResult").innerText = "❌ 상담 요청 실패!";
-        });
-    }
-
-    // 모든 상담 요청 조회
-    function fetchInquiries() {
-        fetch(`${API_BASE}/inquiries`)
-        .then(response => response.json())
-        .then(data => {
-            let html = "<ul>";
-            data.forEach(inquiry => {
-                html += `<li>🆔 ${inquiry.id} - ${inquiry.description} (📌 ${inquiry.status})</li>`;
-            });
-            html += "</ul>";
-            document.getElementById("inquiriesList").innerHTML = html;
-        })
-        .catch(error => {
-            document.getElementById("inquiriesList").innerText = "❌ 상담 목록 조회 실패!";
-        });
-    }
-
-    // 특정 상담 요청 상세 조회
-    function fetchInquiryDetails() {
-        const inquiryId = document.getElementById("inquiryId").value;
-
-        fetch(`${API_BASE}/inquiries/${inquiryId}`)
-        .then(response => response.json())
-        .then(data => {
-            let resultClass = data.status === "NEEDED" ? "needed" : "not-needed";
-            document.getElementById("inquiryDetails").innerHTML = `
-                <div class="result ${resultClass}">
-                    🆔 상담 ID: ${data.id}<br>
-                    📜 사건 설명: ${data.description}<br>
-                    📌 상담 필요 여부: <strong>${data.status}</strong>
+    <!-- 서비스 섹션 -->
+    <section class="services">
+        <div class="container">
+            <div class="section-heading">
+                <h2>LawBot 서비스</h2>
+                <p>당신에게 필요한 법률 서비스를 한 곳에서 이용하세요</p>
+            </div>
+            <div class="service-cards">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>AI 법률 상담</h3>
+                        <p>LLM을 활용한 AI 챗봇이 24시간 당신의 법률적 고민을 상담해 드립니다.</p>
+                    </div>
                 </div>
-            `;
-        })
-        .catch(error => {
-            document.getElementById("inquiryDetails").innerText = "❌ 상담 상세 조회 실패!";
-        });
-    }
-</script>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>법률 문제 분석</h3>
+                        <p>당신의 문제를 정확히 분석하고 유형을 파악하여 맞춤형 해결책을 제시합니다.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3>전문 지역 변호사 연결</h3>
+                        <p>필요 시 당신의 문제에 적합한 분야의 전문 지역변호사와 빠르게 연결해 드립니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-</body>
-</html>
+    <!-- 변호사 목록 섹션 -->
+    <section class="lawyers">
+        <div class="container">
+            <div class="section-heading">
+                <h2>분야별 전문 변호사</h2>
+                <p>각 법률 분야의 전문 변호사들이 당신의 문제 해결을 위해 대기 중입니다</p>
+            </div>
+            <div class="lawyer-filters">
+                <button class="filter-button active">전체</button>
+                <button class="filter-button">민사</button>
+                <button class="filter-button">형사</button>
+                <button class="filter-button">부동산</button>
+                <button class="filter-button">상속</button>
+                <button class="filter-button">이혼</button>
+                <button class="filter-button">노동</button>
+                <button class="filter-button">폭행/협박</button>
+                <button class="filter-button">명예훼손/모욕</button>
+                <button class="filter-button">기업법무</button>
+            </div>
+            <div class="lawyer-cards">
+                <div class="lawyer-card">
+                    <div class="lawyer-img">
+                        <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                    </div>
+                    <div class="lawyer-info">
+                        <h3 class="lawyer-name">이승헌 변호사</h3>
+                        <p class="lawyer-specialty">민사, 부동산</p>
+                        <div class="lawyer-rating">
+                            <div class="rating-stars">★★★★★</div>
+                            <span>(4.9)</span>
+                        </div>
+                        <div class="lawyer-actions">
+                            <button class="btn btn-outline">프로필</button>
+                            <button class="btn btn-primary">상담 예약</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="lawyer-card">
+                    <div class="lawyer-img">
+                        <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                    </div>
+                    <div class="lawyer-info">
+                        <h3 class="lawyer-name">김도연 변호사</h3>
+                        <p class="lawyer-specialty">형사, 기업법무</p>
+                        <div class="lawyer-rating">
+                            <div class="rating-stars">★★★★★</div>
+                            <span>(4.8)</span>
+                        </div>
+                        <div class="lawyer-actions">
+                            <button class="btn btn-outline">프로필</button>
+                            <button class="btn btn-primary">상담 예약</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="lawyer-card">
+                    <div class="lawyer-img">
+                        <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                    </div>
+                    <div class="lawyer-info">
+                        <h3 class="lawyer-name">김재하 변호사</h3>
+                        <p class="lawyer-specialty">상속, 이혼</p>
+                        <div class="lawyer-rating">
+                            <div class="rating-stars">★★★★★</div>
+                            <span>(4.8)</span>
+                        </div>
+                        <div class="lawyer-actions">
+                            <button class="btn btn-outline">프로필</button>
+                            <button class="btn btn-primary">상담 예약</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="lawyer-card">
+                    <div class="lawyer-img">
+                        <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                    </div>
+                    <div class="lawyer-info">
+                        <h3 class="lawyer-name">김태윤 변호사</h3>
+                        <p class="lawyer-specialty">노동,민사</p>
+                        <div class="lawyer-rating">
+                            <div class="rating-stars">★★★★★</div>
+                            <span>(4.8)</span>
+                        </div>
+                        <div class="lawyer-actions">
+                            <button class="btn btn-outline">프로필</button>
+                            <button class="btn btn-primary">상담 예약</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="lawyer-card">
+                    <div class="lawyer-img">
+                        <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                    </div>
+                    <div class="lawyer-info">
+                        <h3 class="lawyer-name">조성호 변호사</h3>
+                        <p class="lawyer-specialty">폭행/협박, 명예훼손/모욕</p>
+                        <div class="lawyer-rating">
+                            <div class="rating-stars">★★★★★</div>
+                            <span>(4.8)</span>
+                        </div>
+                        <div class="lawyer-actions">
+                            <button class="btn btn-outline">프로필</button>
+                            <button class="btn btn-primary">상담 예약</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 사용 방법 섹션 -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-heading">
+                <h2>이용 방법</h2>
+                <p>LawBot을 통해 쉽고 빠르게 법률 상담을 받는 방법</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <h3>1. 문제 입력</h3>
+                    <p>당신의 법률적 고민을 챗봇에 입력하세요.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>2. AI 상담</h3>
+                    <p>AI가 문제를 분석하고 기본적인 법률 상담을 제공합니다.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>3. 변호사 연결</h3>
+                    <p>필요시 적합한 전문 변호사와 연결하여 상담받으세요.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-column">
+                <h3>LawBot</h3>
+                <p>LLM 기반 지역 법률 상담 웹앱<br>쉽고 빠른 법률 상담 서비스</p>
+            </div>
+            <div class="footer-column">
+                <h3>서비스</h3>
+                <ul class="footer-links">
+                    <li><a href="#">AI 법률 상담</a></li>
+                    <li><a href="#">변호사 찾기</a></li>
+                    <li><a href="#">법률 문서 작성</a></li>
+                    <li><a href="#">법률 정보 센터</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>회사 정보</h3>
+                <ul class="footer-links">
+                    <li><a href="#">회사 소개</a></li>
+                    <li><a href="#">이용 약관</a></li>
+                    <li><a href="#">개인정보 처리방침</a></li>
+                    <li><a href="#">문의하기</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>연락처</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-map-marker-alt"></i> 전남대학교 소프트웨어공학과 Lawbot팀 123</li>
+                    <li><i class="fas fa-phone"></i> 062-123-4567</li>
+                    <li><i class="fas fa-envelope"></i> info@lawbot.kr</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2025 LawBot. All rights reserved.</p>
+        </div>
+    </footer>
+
+    
+    

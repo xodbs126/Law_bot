@@ -26,7 +26,7 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole role;    // 역할 (일반 사용자 / 변호사)
+    private UserRole role;
 
     public enum UserRole {
         USER, LAWYER

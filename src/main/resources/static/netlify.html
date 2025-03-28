@@ -1,0 +1,947 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawBot - 쉽고 빠른 법률 상담</title>
+    <link rel="stylesheet" href="stylee.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<!-- 헤더 -->
+<header>
+    <div class="container header-container">
+        <a href="#" class="logo">Law<span>Bot</span></a>
+        <nav>
+            <ul>
+                <li><a href="#">법률 상담</a></li>
+                <li><a href="#" id="findLawyerLink">변호사 찾기</a></li>
+                <li><a href="#" id="consultationCasesLink">상담 사례</a></li>
+                <li><a href="#">해결 사례</a></li>
+                <li><a href="#">고객문의</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+
+            <button id="loginBtn" class="btn btn-outline">로그인</button>
+            <button id="logoutBtn" style="display: none;" class="btn btn-outline">로그아웃</button>
+            <div id="welcomeMessage" class="welcome-message">
+                <span id="userName"></span> 고객님 환영합니다.
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- 히어로 섹션 -->
+<section class="hero">
+    <div class="container">
+        <h1>AI로 더 쉽고 빠른 법률 상담</h1>
+        <p>LawBot이 당신의 법률 문제를 해결해 드립니다. 지금 바로 상담하고 전문 변호사의 도움을 받아보세요.</p>
+        <div class="search-box">
+            <input type="text" id="userInput" placeholder="어떤 법률 문제가 있으신가요?">
+            <button id="chatSubmitBtn" onclick="sendMessage()">상담 시작하기</button>
+            <div id="resultDisplay" style="margin-top: 20px; text-align: center;"></div>
+        </div>
+    </div>
+</section>
+
+<!-- 서비스 섹션 -->
+<section class="services">
+    <div class="container">
+        <div class="section-heading">
+            <h2>LawBot 서비스</h2>
+            <p>당신에게 필요한 법률 서비스를 한 곳에서 이용하세요</p>
+        </div>
+        <div class="service-cards">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>AI 법률 상담</h3>
+                    <p>LLM을 활용한 AI 챗봇이 24시간 당신의 법률적 고민을 상담해 드립니다.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>법률 문제 분석</h3>
+                    <p>당신의 문제를 정확히 분석하고 유형을 파악하여 맞춤형 해결책을 제시합니다.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>전문 지역 변호사 연결</h3>
+                    <p>필요 시 당신의 문제에 적합한 분야의 전문 지역변호사와 빠르게 연결해 드립니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 변호사 목록 섹션 -->
+<section class="lawyers">
+    <div class="container">
+        <div class="section-heading">
+            <h2>분야별 전문 변호사</h2>
+            <p>각 법률 분야의 전문 변호사들이 당신의 문제 해결을 위해 대기 중입니다</p>
+        </div>
+        <div class="lawyer-filters">
+            <button class="filter-button active">전체</button>
+            <button class="filter-button">민사</button>
+            <button class="filter-button">형사</button>
+            <button class="filter-button">부동산</button>
+            <button class="filter-button">상속</button>
+            <button class="filter-button">이혼</button>
+            <button class="filter-button">노동</button>
+            <button class="filter-button">폭행/협박</button>
+            <button class="filter-button">명예훼손/모욕</button>
+            <button class="filter-button">기업법무</button>
+        </div>
+        <div class="lawyer-cards">
+            <div class="lawyer-card">
+                <div class="lawyer-img">
+                    <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                </div>
+                <div class="lawyer-info">
+                    <h3 class="lawyer-name">이승헌 변호사</h3>
+                    <p class="lawyer-specialty">민사, 부동산</p>
+                    <div class="lawyer-rating">
+                        <div class="rating-stars">★★★★★</div>
+                        <span>(4.9)</span>
+                    </div>
+                    <div class="lawyer-actions">
+                        <button class="btn btn-outline">프로필</button>
+                        <button class="btn btn-primary">상담 예약</button>
+                    </div>
+                </div>
+            </div>
+            <div class="lawyer-card">
+                <div class="lawyer-img">
+                    <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                </div>
+                <div class="lawyer-info">
+                    <h3 class="lawyer-name">김도연 변호사</h3>
+                    <p class="lawyer-specialty">형사, 기업법무</p>
+                    <div class="lawyer-rating">
+                        <div class="rating-stars">★★★★★</div>
+                        <span>(4.8)</span>
+                    </div>
+                    <div class="lawyer-actions">
+                        <button class="btn btn-outline">프로필</button>
+                        <button class="btn btn-primary">상담 예약</button>
+                    </div>
+                </div>
+            </div>
+            <div class="lawyer-card">
+                <div class="lawyer-img">
+                    <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                </div>
+                <div class="lawyer-info">
+                    <h3 class="lawyer-name">김재하 변호사</h3>
+                    <p class="lawyer-specialty">상속, 이혼</p>
+                    <div class="lawyer-rating">
+                        <div class="rating-stars">★★★★★</div>
+                        <span>(4.8)</span>
+                    </div>
+                    <div class="lawyer-actions">
+                        <button class="btn btn-outline">프로필</button>
+                        <button class="btn btn-primary">상담 예약</button>
+                    </div>
+                </div>
+            </div>
+            <div class="lawyer-card">
+                <div class="lawyer-img">
+                    <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                </div>
+                <div class="lawyer-info">
+                    <h3 class="lawyer-name">김태윤 변호사</h3>
+                    <p class="lawyer-specialty">노동,민사</p>
+                    <div class="lawyer-rating">
+                        <div class="rating-stars">★★★★★</div>
+                        <span>(4.8)</span>
+                    </div>
+                    <div class="lawyer-actions">
+                        <button class="btn btn-outline">프로필</button>
+                        <button class="btn btn-primary">상담 예약</button>
+                    </div>
+                </div>
+            </div>
+            <div class="lawyer-card">
+                <div class="lawyer-img">
+                    <img src="/api/placeholder/300/200" alt="변호사 이미지">
+                </div>
+                <div class="lawyer-info">
+                    <h3 class="lawyer-name">조성호 변호사</h3>
+                    <p class="lawyer-specialty">폭행/협박, 명예훼손/모욕</p>
+                    <div class="lawyer-rating">
+                        <div class="rating-stars">★★★★★</div>
+                        <span>(4.8)</span>
+                    </div>
+                    <div class="lawyer-actions">
+                        <button class="btn btn-outline">프로필</button>
+                        <button class="btn btn-primary">상담 예약</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 사용 방법 섹션 -->
+<section class="how-it-works">
+    <div class="container">
+        <div class="section-heading">
+            <h2>이용 방법</h2>
+            <p>LawBot을 통해 쉽고 빠르게 법률 상담을 받는 방법</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-keyboard"></i>
+                </div>
+                <h3>1. 문제 입력</h3>
+                <p>당신의 법률적 고민을 챗봇에 입력하세요.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>2. AI 상담</h3>
+                <p>AI가 문제를 분석하고 기본적인 법률 상담을 제공합니다.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3>3. 변호사 연결</h3>
+                <p>필요시 적합한 전문 변호사와 연결하여 상담받으세요.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 지도 섹션 -->
+<section class="map-section" id="mapSection" style="display: none;">
+    <div class="container">
+        <div class="section-heading">
+            <h2>지역별 변호사 찾기</h2>
+            <p>원하시는 지역을 클릭하여 전문 변호사를 만나보세요</p>
+        </div>
+        <div class="map-container">
+            <div class="region-info">지도에서 지역을 선택하면 해당 지역 변호사 정보가 표시됩니다</div>
+            <!-- 남한 지도 이미지 -->
+            <div class="korea-map">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Map_of_South_Korea-blank.svg/1200px-Map_of_South_Korea-blank.svg.png" alt="남한 지도" id="koreaMapImage">
+                <!-- 투명한 레이어 (클릭 가능한 영역) -->
+                <div class="region-overlay">
+                    <!-- 서울/경기 지역 -->
+                    <div class="region-area" data-lawyer="조성호" style="top: 12%; left: 33%; width: 10%; height: 17%;"></div>
+                    <!-- 경상남도 지역 -->
+                    <div class="region-area" data-lawyer="김도연" style="top: 50%; left: 54%; width: 9%; height: 10%;"></div>
+                    <!-- 전라북도 -->
+                    <div class="region-area" data-lawyer="김재하" style="top: 48%; left: 32%; width: 11%; height: 10%;"></div>
+                    <!-- 전라남도 -->
+                    <div class="region-area" data-lawyer="이승헌" style="top: 60%; left: 30%; width: 12%; height: 10%;"></div>
+                    <!-- 제주도 -->
+                    <div class="region-area" data-lawyer="김태윤" style="top: 88%; left: 26%; width: 10%; height: 10%;"></div>
+                </div>
+            </div>
+            <!-- 변호사 프로필 패널 (처음에는 숨겨져 있음) -->
+            <div id="lawyerProfile" class="lawyer-profile">
+                <!-- 닫기 버튼 추가 -->
+                <button class="close-btn" onclick="closeProfile()">×</button>
+                <!-- 프로필 내용은 자바스크립트에서 동적으로 채워짐 -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 상담 사례 섹션 (동적 페이지) -->
+<section id="consultationCasesSection" class="consultation-cases" style="display: none;">
+    <div class="container">
+        <div class="section-heading">
+            <h2>상담 사례</h2>
+            <p>LawBot을 통해 해결된 다양한 상담 사례를 확인해보세요.</p>
+        </div>
+        <div class="case-cards" id="caseCards">
+            <!-- 상담 사례 카드가 여기에 동적으로 추가됩니다 -->
+        </div>
+    </div>
+</section>
+
+<!-- 유튜브 영상 모달 -->
+<div id="videoModal" class="video-modal">
+    <div class="video-modal-content">
+        <span class="close-btn" onclick="closeVideoModal()">&times;</span>
+        <iframe id="youtubeVideo" width="100%" height="400" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</div>
+<!-- 푸터 -->
+<footer>
+    <div class="container footer-container">
+        <div class="footer-column">
+            <h3>LawBot</h3>
+            <p>LLM 기반 지역 법률 상담 웹앱<br>쉽고 빠른 법률 상담 서비스</p>
+        </div>
+        <div class="footer-column">
+            <h3>서비스</h3>
+            <ul class="footer-links">
+                <li><a href="#">AI 법률 상담</a></li>
+                <li><a href="#">변호사 찾기</a></li>
+                <li><a href="#">법률 문서 작성</a></li>
+                <li><a href="#">법률 정보 센터</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>회사 정보</h3>
+            <ul class="footer-links">
+                <li><a href="#">회사 소개</a></li>
+                <li><a href="#">이용 약관</a></li>
+                <li><a href="#">개인정보 처리방침</a></li>
+                <li><a href="#">문의하기</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>연락처</h3>
+            <ul class="footer-links">
+                <li><i class="fas fa-map-marker-alt"></i> 전남대학교 소프트웨어공학과 Lawbot팀 123</li>
+                <li><i class="fas fa-phone"></i> 062-123-4567</li>
+                <li><i class="fas fa-envelope"></i> info@lawbot.kr</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container footer-bottom">
+        <p>© 2025 LawBot. All rights reserved.</p>
+    </div>
+    <!-- 상담 예약 모달 -->
+    <div id="consultationModal" class="consultation-modal">
+        <div class="consultation-modal-content">
+            <!-- X 버튼 추가 -->
+            <span class="close-btn" onclick="closeConsultationModal()">&times;</span>
+            <h2>상담 예약</h2>
+            <form id="consultationForm">
+                <div class="form-group">
+                    <label for="consultationName">이름</label>
+                    <input type="text" id="consultationName" name="consultationName" required>
+                </div>
+                <div class="form-group">
+                    <label for="consultationRegion">지역</label>
+                    <input type="text" id="consultationRegion" name="consultationRegion" required>
+                </div>
+                <div class="form-group">
+                    <label for="consultationField">법률 분야</label>
+                    <select id="consultationField" name="consultationField" required>
+                        <option value="민사">민사</option>
+                        <option value="형사">형사</option>
+                        <option value="부동산">부동산</option>
+                        <option value="상속">상속</option>
+                        <option value="이혼">이혼</option>
+                        <option value="노동">노동</option>
+                        <option value="폭행/협박">폭행/협박</option>
+                        <option value="명예훼손/모욕">명예훼손/모욕</option>
+                        <option value="기업법무">기업법무</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="consultationDate">상담 날짜</label>
+                    <input type="date" id="consultationDate" name="consultationDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="consultationDetails">상담 내용</label>
+                    <textarea id="consultationDetails" name="consultationDetails" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">예약 요청</button>
+            </form>
+        </div>
+    </div>
+</footer>
+<!-- 문의하기 모달 -->
+<div id="inquiryModal" class="consultation-modal">
+    <div class="consultation-modal-content">
+        <span class="close-btn" onclick="closeInquiryModal()">&times;</span>
+        <h2>문의하기</h2>
+        <form id="inquiryForm">
+            <div class="form-group">
+                <label for="inquiryName">이름</label>
+                <input type="text" id="inquiryName" name="inquiryName" required>
+            </div>
+            <div class="form-group">
+                <label for="inquiryEmail">이메일</label>
+                <input type="email" id="inquiryEmail" name="inquiryEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="inquiryMessage">문의 내용</label>
+                <textarea id="inquiryMessage" name="inquiryMessage" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">문의 보내기</button>
+        </form>
+    </div>
+</div>
+
+<!-- 로그인 팝업 -->
+<div id="loginPopup" class="login-popup">
+    <div class="login-popup-content">
+        <h2>로그인</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">아이디</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="forgot-password">
+                <a href="#">비밀번호 찾기</a>
+            </div>
+            <button type="submit" class="btn btn-primary">로그인</button>
+        </form>
+        <div class="login-footer">
+            <p>계정이 없으신가요? <a href="#">회원가입</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 변호사 찾기 링크 클릭 시 지도 섹션 표시
+document.getElementById("findLawyerLink").addEventListener("click", function(event) {
+    event.preventDefault(); // 기본 링크 동작 방지
+    const mapSection = document.getElementById("mapSection");
+    mapSection.style.display = "block"; // 지도 섹션 표시
+    mapSection.scrollIntoView({ behavior: "smooth", block: "start" }); // 스크롤 이동
+});
+
+// 이미지 맵 클릭 이벤트 처리
+document.querySelectorAll('area').forEach(area => {
+    area.addEventListener('click', function(event) {
+        event.preventDefault(); // 기본 링크 동작 방지
+        const lawyerName = this.getAttribute('data-lawyer');
+        if (lawyerName && lawyerData[lawyerName]) {
+            showLawyerProfile(lawyerData[lawyerName]);
+        }
+    });
+});
+
+// 클릭 가능한 영역 클릭 이벤트 처리
+document.querySelectorAll('.region-area').forEach(area => {
+    area.addEventListener('click', function() {
+        const lawyerName = this.getAttribute('data-lawyer');
+        if (lawyerName && lawyerData[lawyerName]) {
+            showLawyerProfile(lawyerData[lawyerName]);
+        }
+    });
+});
+const lawyerData = {
+    "이승헌": {
+        name: "이승헌 변호사",
+        region: "광주,전남남",
+        specialty: "민사, 부동산",
+        rating: 4.9,
+        experience: "10년",
+        education: "서울대학교 법학과",
+        description: "부동산 관련 법률 문제와 민사 소송에서 풍부한 경험을 가진 변호사입니다. 특히 광주,전남 지역의 부동산 분쟁에 대한 전문성을 인정받고 있습니다.",
+        cases: [
+            "부동산 경계 분쟁 승소",
+            "토지 소유권 확인 소송 승소",
+            "임대차 계약 분쟁 해결"
+        ],
+        contact: {
+            phone: "062-123-4567",
+            email: "lee@lawbot.kr",
+            office: "광주 서구 상무중앙로 123 법무타워 7층"
+        }
+    },
+    "김도연": {
+        name: "김도연 변호사",
+        region: "부산,경상도",
+        specialty: "형사, 기업법무",
+        rating: 4.8,
+        experience: "15년",
+        education: "연세대학교 법학과",
+        description: "형사 사건과 기업법무 영역에서 탁월한 성과를 보이는 변호사입니다. 경상도 지역의 기업들을 위한 법률 자문에 특화되어 있습니다.",
+        cases: [
+            "횡령 혐의 무죄 판결",
+            "기업 인수합병 법률 자문",
+            "회사법 관련 분쟁 해결"
+        ],
+        contact: {
+            phone: "061-456-7890",
+            email: "kim@lawbot.kr",
+            office: "부산 감전동 평화로 456 법무센터 4층"
+        }
+    },
+    "김재하": {
+        name: "김재하 변호사",
+        region: "전주,전라북도",
+        specialty: "상속, 이혼",
+        rating: 4.8,
+        experience: "12년",
+        education: "고려대학교 법학과",
+        description: "상속 및 이혼 관련 법률 문제에 전문성을 가진 변호사입니다. 전라북도 지역에서 많은 사례를 성공적으로 해결했습니다.",
+        cases: [
+            "상속 재산 분할 소송 승소",
+            "이혼 소송 및 재산 분할",
+            "상속세 절세 컨설팅"
+        ],
+        contact: {
+            phone: "063-111-2222",
+            email: "kimjh@lawbot.kr",
+            office: "전북 전주시 완산구 중앙로 123"
+        }
+    },
+    "김태윤": {
+        name: "김태윤 변호사",
+        region: "제주도",
+        specialty: "노동, 민사",
+        rating: 4.7,
+        experience: "8년",
+        education: "서울대학교 법학과",
+        description: "노동법 및 민사 소송에 전문성을 가진 변호사입니다. 제주도 지역의 노동 분쟁 해결에 많은 경험이 있습니다.",
+        cases: [
+            "노동 분쟁 조정 성공",
+            "임금 체불 소송 승소",
+            "부당 해고 소송"
+        ],
+        contact: {
+            phone: "064-333-4444",
+            email: "kimty@lawbot.kr",
+            office: "제주시 연동로 456"
+        }
+    },
+    "조성호": {
+        name: "조성호 변호사",
+        region: "서울,경기도",
+        specialty: "폭행/협박, 명예훼손/모욕",
+        rating: 4.9,
+        experience: "14년",
+        education: "연세대학교 법학과",
+        description: "폭행, 협박, 명예훼손 등 형사 사건에 특화된 변호사입니다. 서울,경기도 지역에서 많은 사건을 성공적으로 해결했습니다.",
+        cases: [
+            "폭행 혐의 무죄 판결",
+            "명예훼손 소송 승소",
+            "협박 사건 조정 성공"
+        ],
+        contact: {
+            phone: "031-555-6666",
+            email: "josh@lawbot.kr",
+            office: "경기 수원시 팔달구 중부대로 789"
+        }
+    }
+};
+
+// 지역을 클릭했을 때 해당 변호사 프로필 표시
+document.querySelectorAll('.region').forEach(region => {
+    region.addEventListener('click', function() {
+        const lawyerName = this.getAttribute('data-lawyer');
+        if (lawyerName && lawyerData[lawyerName]) {
+            showLawyerProfile(lawyerData[lawyerName]);
+        }
+    });
+});
+// 배경 클릭 시 프로필 닫기
+document.addEventListener('click', function(event) {
+    const profileElement = document.getElementById('lawyerProfile');
+    if (event.target === profileElement) {
+        closeProfile();
+    }
+});
+
+// 프로필 닫기 버튼 추가
+document.querySelector('.close-btn').addEventListener('click', function() {
+    closeProfile();
+});
+
+// 프로필 닫기 함수
+function closeProfile() {
+    const profileElement = document.getElementById('lawyerProfile');
+    profileElement.style.display = 'none';
+    closeConsultationModal(); // 상담 예약 모달도 함께 닫기
+}
+// 변호사 프로필에서 상담 예약 버튼 클릭 이벤트 처리
+document.querySelectorAll('.profile-actions .btn-primary').forEach(button => {
+    button.addEventListener('click', function() {
+        const lawyerName = this.closest('.lawyer-profile').querySelector('.profile-info h2').textContent.trim();
+        openConsultationModal(lawyerName);
+    });
+});
+// 변호사 프로필 표시 함수
+function showLawyerProfile(lawyer) {
+    const profileHTML = `
+        <div class="profile-header">
+            <div class="profile-img">
+                <img src="/api/placeholder/300/300" alt="${lawyer.name}">
+            </div>
+            <div class="profile-info">
+                <h2>${lawyer.name}</h2>
+                <p>${lawyer.region} 지역 | ${lawyer.specialty}</p>
+                <div class="profile-rating">
+                    <div class="rating-stars">★★★★★</div>
+                    <span>(${lawyer.rating})</span>
+                </div>
+            </div>
+        </div>
+        <div class="profile-content">
+            <div class="profile-section">
+                <h3>소개</h3>
+                <p>${lawyer.description}</p>
+                <h3>경력 및 학력</h3>
+                <ul>
+                    <li><i class="fas fa-briefcase"></i> 경력: ${lawyer.experience}</li>
+                    <li><i class="fas fa-graduation-cap"></i> 학력: ${lawyer.education}</li>
+                </ul>
+            </div>
+            <div class="profile-section">
+                <h3>주요 승소 사례</h3>
+                <ul>
+                    ${lawyer.cases.map(c => `<li><i class="fas fa-gavel"></i> ${c}</li>`).join('')}
+                </ul>
+                <h3>연락처</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> ${lawyer.contact.phone}</li>
+                    <li><i class="fas fa-envelope"></i> ${lawyer.contact.email}</li>
+                    <li><i class="fas fa-map-marker-alt"></i> ${lawyer.contact.office}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="profile-actions">
+            <button class="btn btn-outline">문의하기</button>
+            <button class="btn btn-primary">상담 예약</button>
+        </div>
+    `;
+
+    const profileElement = document.getElementById('lawyerProfile');
+    profileElement.innerHTML = profileHTML;
+    profileElement.style.display = 'block';
+
+    // 프로필로 스크롤
+    profileElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+
+// 상담 사례 데이터
+const consultationCases = [
+            {
+                title: "민사 사례: 부동산 계약 분쟁",
+                description: "부동산 매매 계약 과정에서 발생한 분쟁을 해결한 사례입니다.",
+                category: "민사",
+                date: "2024-03-15",
+                videoId: "GgUCcil8j9c" // 유튜브 영상 ID (예시)
+            },
+            {
+                title: "형사 사례: 명예훼손 소송",
+                description: "온라인상에서의 명예훼손 사건을 성공적으로 해결한 사례입니다.",
+                category: "형사",
+                date: "2024-02-20",
+                videoId: "Jh1lTtnznvc" // 유튜브 영상 ID (예시)
+            },
+            {
+                title: "이혼 사례: 재산 분할",
+                description: "이혼 과정에서의 재산 분할 문제를 해결한 사례입니다.",
+                category: "이혼",
+                date: "2024-01-10",
+                videoId: "d4tu_s9UheE" // 유튜브 영상 ID (예시)
+            },
+            {
+                title: "노동 사례: 부당 해고",
+                description: "부당 해고 사건을 성공적으로 해결한 사례입니다.",
+                category: "노동",
+                date: "2023-12-05",
+                videoId: "w65p_3YuSI4" // 유튜브 영상 ID (예시)
+            },
+            {
+                title: "폭행/협박 사례: 가정 폭력",
+                description: "가정 내 폭행 및 협박 사건을 해결한 사례입니다.",
+                category: "폭행/협박",
+                date: "2023-11-20",
+                videoId: "bOG43x8iPHI" // 유튜브 영상 ID (예시)
+            },
+            {
+                title: "명예훼손/모욕 사례: SNS 모욕",
+                description: "SNS상에서의 모욕적 발언으로 인한 명예훼손 사건을 해결한 사례입니다.",
+                category: "명예훼손/모욕",
+                date: "2023-10-15",
+                videoId: "HmEFc3y7n-g" // 유튜브 영상 ID (예시)
+            }
+        ];
+
+
+         // 상담 사례 페이지 표시
+         document.getElementById("consultationCasesLink").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.getElementById("consultationCasesSection").style.display = "block";
+            document.getElementById("consultationCasesSection").scrollIntoView({ behavior: "smooth", block: "start" });
+            renderConsultationCases();
+        });
+
+        // 상담 사례 렌더링 함수
+        function renderConsultationCases() {
+    const caseCards = document.getElementById("caseCards");
+    caseCards.innerHTML = consultationCases.map(caseItem => `
+        <div class="case-card" data-video-id="${caseItem.videoId}">
+            <h3>${caseItem.title}</h3>
+            <p>${caseItem.description}</p>
+            <div class="case-meta">
+                <span class="case-category">${caseItem.category}</span>
+                <span class="case-date">${caseItem.date}</span>
+            </div>
+        </div>
+    `).join("");
+
+    // 각 카드에 클릭 이벤트 추가
+    document.querySelectorAll(".case-card").forEach(card => {
+        card.addEventListener("click", function() {
+            const videoId = this.getAttribute("data-video-id");
+            openVideoModal(videoId);
+        });
+    });
+}
+        // 로그인 팝업 표시
+        document.getElementById("loginBtn").addEventListener("click", function() {
+            document.getElementById("loginPopup").classList.add("show");
+        });
+
+        // 로그인 폼 제출 처리
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+
+            if (username) { // 간단한 유효성 검사
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("username", username);
+                updateLoginState(username); // 로그인 상태 업데이트
+                document.getElementById("loginPopup").classList.remove("show"); // 팝업 닫기
+            } else {
+                alert("아이디를 입력해주세요.");
+            }
+        });
+        // 페이지 로드시 로그인 상태 확인 및 업데이트
+        window.onload = function() {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            const username = localStorage.getItem("username");
+            if (isLoggedIn === "true" && username) {
+                updateLoginState(username);
+            }
+        }
+
+        // 로그아웃
+        document.getElementById("logoutBtn").addEventListener("click", function() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("username");
+            updateLoginState(); // 로그인 상태 업데이트 (기본값으로)
+        });
+
+        function updateLoginState(username) {
+            const loginBtn = document.getElementById("loginBtn");
+            const logoutBtn = document.getElementById("logoutBtn");
+            const welcomeMessage = document.getElementById("welcomeMessage");
+            const userNameSpan = document.getElementById("userName");
+
+            if (username) {
+                // 로그인 상태
+                loginBtn.style.display = "none";
+                logoutBtn.style.display = "inline-block";
+                userNameSpan.textContent = username;
+                welcomeMessage.style.display = "block";
+            } else {
+                // 로그아웃 상태
+                loginBtn.style.display = "inline-block";
+                logoutBtn.style.display = "none";
+                welcomeMessage.style.display = "none";
+            }
+        }
+
+        // 프로필 버튼 클릭 이벤트 처리
+document.querySelectorAll('.lawyer-actions .btn-outline').forEach(button => {
+    button.addEventListener('click', function() {
+        // 변호사 이름 가져오기
+        const lawyerName = this.closest('.lawyer-card').querySelector('.lawyer-name').textContent.trim();
+        // 변호사 이름에서 "변호사" 제거 (예: "이승헌 변호사" -> "이승헌")
+        const name = lawyerName.replace(' 변호사', '');
+        // 변호사 데이터에서 프로필 찾기
+        if (lawyerData[name]) {
+            showLawyerProfile(lawyerData[name]);
+        }
+    });
+});
+// 변호사 프로필에서 "문의하기" 버튼 클릭 이벤트 처리
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('btn-outline') && event.target.textContent === '문의하기') {
+        const lawyerName = event.target.closest('.lawyer-profile').querySelector('.profile-info h2').textContent.trim();
+        openInquiryModal(lawyerName); // 문의하기 모달 열기
+    }
+});
+
+// 변호사 프로필에서 "상담 예약" 버튼 클릭 이벤트 처리
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('btn-primary') && event.target.textContent === '상담 예약') {
+        const lawyerName = event.target.closest('.lawyer-profile').querySelector('.profile-info h2').textContent.trim();
+        openConsultationModal(lawyerName); // 상담 예약 모달 열기
+    }
+});
+
+// 문의하기 모달 열기 함수
+function openInquiryModal(lawyerName) {
+    alert(`${lawyerName} 변호사에게 문의하기 기능이 실행됩니다.\n문의하기 모달을 여는 코드를 추가하세요.`);
+    // 여기에 문의하기 모달을 여는 코드를 추가할 수 있습니다.
+}
+
+// 상담 예약 모달 열기 함수
+function openConsultationModal(lawyerName) {
+    const modal = document.getElementById("consultationModal");
+    modal.style.display = "flex";
+    document.getElementById("consultationForm").setAttribute("data-lawyer", lawyerName);
+}
+
+// 상담 예약 모달 닫기 함수
+function closeConsultationModal() {
+    const modal = document.getElementById("consultationModal");
+    modal.style.display = "none";
+}
+
+// 상담 예약 폼 제출 처리
+document.getElementById("consultationForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const lawyerName = this.getAttribute("data-lawyer");
+    const name = document.getElementById("consultationName").value;
+    const region = document.getElementById("consultationRegion").value;
+    const field = document.getElementById("consultationField").value;
+    const date = document.getElementById("consultationDate").value;
+    const details = document.getElementById("consultationDetails").value;
+
+    // 여기서 예약 정보를 서버로 전송하거나 처리할 수 있습니다.
+    alert(`${lawyerName} 변호사에게 상담 예약이 요청되었습니다.\n\n이름: ${name}\n지역: ${region}\n법률 분야: ${field}\n상담 날짜: ${date}\n상담 내용: ${details}`);
+
+    closeConsultationModal();
+});
+// 각 카드에 클릭 이벤트 추가
+document.querySelectorAll(".case-card").forEach(card => {
+    card.addEventListener("click", function() {
+        const videoId = this.getAttribute("data-video-id");
+        openVideoModal(videoId);
+    });
+});
+// 유튜브 영상 모달 열기
+function openVideoModal(videoId) {
+    const modal = document.getElementById("videoModal");
+    const iframe = document.getElementById("youtubeVideo");
+    iframe.src = `https://www.youtube.com/embed/${videoId}`;
+    modal.style.display = "block";
+}
+
+// 유튜브 영상 모달 닫기
+function closeVideoModal() {
+    const modal = document.getElementById("videoModal");
+    const iframe = document.getElementById("youtubeVideo");
+    iframe.src = ""; // 영상 중지
+    modal.style.display = "none";
+}
+
+// 모달 외부 클릭 시 닫기
+window.onclick = function(event) {
+    const modal = document.getElementById("videoModal");
+    if (event.target === modal) {
+        closeVideoModal();
+    }
+};
+
+// 문의하기 모달 열기 함수
+function openInquiryModal(lawyerName) {
+    const modal = document.getElementById("inquiryModal");
+    modal.style.display = "flex";
+    document.getElementById("inquiryForm").setAttribute("data-lawyer", lawyerName);
+}
+
+// 문의하기 모달 닫기 함수
+function closeInquiryModal() {
+    const modal = document.getElementById("inquiryModal");
+    modal.style.display = "none";
+}
+
+// 문의하기 폼 제출 처리
+document.getElementById("inquiryForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const lawyerName = this.getAttribute("data-lawyer");
+    const name = document.getElementById("inquiryName").value;
+    const email = document.getElementById("inquiryEmail").value;
+    const message = document.getElementById("inquiryMessage").value;
+
+    alert(`${lawyerName} 변호사에게 문의가 전송되었습니다.\n\n이름: ${name}\n이메일: ${email}\n문의 내용: ${message}`);
+    closeInquiryModal();
+});
+// 상담 예약 모달 열기
+function openConsultationModal(lawyerName) {
+    const modal = document.getElementById("consultationModal");
+    modal.style.display = "flex";
+    document.getElementById("consultationForm").setAttribute("data-lawyer", lawyerName);
+}
+
+// 상담 예약 모달 닫기
+function closeConsultationModal() {
+    const modal = document.getElementById("consultationModal");
+    modal.style.display = "none";
+}
+
+// 상담 예약 폼 제출 처리
+document.getElementById("consultationForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const lawyerName = this.getAttribute("data-lawyer");
+    const name = document.getElementById("consultationName").value;
+    const region = document.getElementById("consultationRegion").value;
+    const field = document.getElementById("consultationField").value;
+    const date = document.getElementById("consultationDate").value;
+    const details = document.getElementById("consultationDetails").value;
+
+    // 여기서 예약 정보를 서버로 전송하거나 처리할 수 있습니다.
+    alert(`${lawyerName} 변호사에게 상담 예약이 요청되었습니다.\n\n이름: ${name}\n지역: ${region}\n법률 분야: ${field}\n상담 날짜: ${date}\n상담 내용: ${details}`);
+
+    closeConsultationModal();
+});
+
+// 변호사 카드의 상담 예약 버튼 클릭 이벤트 처리
+document.querySelectorAll('.lawyer-actions .btn-primary').forEach(button => {
+    button.addEventListener('click', function() {
+        const lawyerName = this.closest('.lawyer-card').querySelector('.lawyer-name').textContent.trim();
+        openConsultationModal(lawyerName);
+    });
+});
+  window.sendMessage = async function sendMessage() {
+  const input = document.getElementById("userInput").value;
+  const resultBox = document.getElementById("resultDisplay");
+
+  if (!input.trim()) {
+    resultBox.innerText = "⚠️ 내용을 입력해주세요.";
+    return;
+  }
+
+  resultBox.innerText = "⏳ AI 판단 중...";
+
+  try {
+    const response = await fetch("http://localhost:8080/api/inquiries/1", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(input)
+    });
+
+    const data = await response.json();
+    resultBox.innerText = "🤖 상담 판단 결과: " + (
+      data.status === "NEEDED" ? "🔴 법률 상담이 필요합니다" :
+      data.status === "NOT_NEEDED" ? "🟢 법률 상담이 필요하지 않습니다" :
+      "🟡 추가 정보가 필요합니다"
+    );
+  } catch (error) {
+    console.error("❌ 오류 발생:", error);
+    resultBox.innerText = "❌ 서버 응답 실패. 다시 시도해주세요.";
+  }
+}
+</script>
+</body>
+</html>
